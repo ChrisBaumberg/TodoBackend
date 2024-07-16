@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-
 const express = require("express");
 const app = express();
 const port = process.env.PORT;
@@ -18,7 +17,6 @@ app.use(async(req,res,next)=>{
     try{
         await mongoose.connect(connectString);
         console.log("Running connection");
-       
         next();
     }
     catch(e){
@@ -65,19 +63,19 @@ const Todo = mongoose.model("todos24",todoSchema);
 
 
 //Default home route
-app.get("/",(req,res)=>{
+app.get("/api",(req,res)=>{
     res.send("Hallo Welt");
 });
 
 
 //Test route
-app.get("/health-check", (req, res)=>{
+app.get("/api/health-check", (req, res)=>{
     res.status(200).send({message:"Running Backend works"})
     
 });
 
 //todos getter route
-app.get("/todos", async(req, res )=>{
+app.get("/api/todos", async(req, res )=>{
     try{
         //find query - https://mongoosejs.com/docs/api/model.html#Model.find()
         //filter {} gibt alle Objects zurück
@@ -92,7 +90,7 @@ app.get("/todos", async(req, res )=>{
 })
 
 //Todo add route
-app.post("/addTodo", async(req, res)=>{
+app.post("/api/addTodo", async(req, res)=>{
     try{
         //request schickt body mit todo daten, die wir extrathieren
         const todoToAdd= req.body;
@@ -109,7 +107,7 @@ app.post("/addTodo", async(req, res)=>{
 
 
 //delete route um todos in der Datenbank mit der jeweiligen uuid (aus dem frontend mit request-url) um todo in der DB zu löschen
-app.delete("/deleteTodo/:idParam", async(req, res)=>{
+app.delete("/api/deleteTodo/:idParam", async(req, res)=>{
  
     try{
         const {idParam}=req.params;
@@ -126,7 +124,7 @@ app.delete("/deleteTodo/:idParam", async(req, res)=>{
 //id wird durch url mitübergeben und in mit entsprechender query function wird 
 //das todo aus der DB gefiltert
 //done feld wird in der DB um den umzukehrenden Wert gesetzt
-app.put("/toggleTodo/:idParam/",async(req,res)=>{
+app.put("/api/toggleTodo/:idParam/",async(req,res)=>{
   
     try{
         const {idParam} =req.params;
